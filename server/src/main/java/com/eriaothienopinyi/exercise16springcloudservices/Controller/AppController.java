@@ -21,7 +21,12 @@ public class AppController {
 
     @GetMapping("/cities")
     public List<City> findCities(){
+
         return appService.findAllCities();
+    }
+    @GetMapping("/test")
+    public int testService(){
+        return 1;
     }
 
 }
