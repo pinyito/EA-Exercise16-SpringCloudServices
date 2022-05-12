@@ -20,11 +20,14 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public List<Country> findAllCountries() {
+
         return countryRepository.findAll();
     }
 
     @Override
     public List<City> findAllCities() {
+
         return cityRepository.findAll();
     }
+
 }

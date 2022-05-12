@@ -7,6 +7,10 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 
 spring:
+  security:
+    user:
+      name: eliot
+      password: c1e3d0fa-5aa8-4be7-83f7-32974dd617bf
   application:
     name: Server
   datasource:
