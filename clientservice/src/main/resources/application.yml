@@ -1,6 +1,11 @@
 server:
   port: 8082
 
+server-service:
+  service-name: Server
+  username: eliot
+  password: c1e3d0fa-5aa8-4be7-83f7-32974dd617bf
+
 eureka:
   client:
     serviceUrl:

@@ -1,4 +1,4 @@
-package com.eriaothienopinyi.clientservice;
+package com.eriaothienopinyi.clientservice.Model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
