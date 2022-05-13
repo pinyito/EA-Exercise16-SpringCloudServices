@@ -3,10 +3,12 @@ package com.eriaothienopinyi.clientservice.Controller;
 import com.eriaothienopinyi.clientservice.Model.Country;
 import com.eriaothienopinyi.clientservice.Service.ClientService;
 import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,8 +38,17 @@ public class ClientController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    EurekaClient eurekaClient;
+
+//    @HystrixCommand(fallbackMethod = "fallBack")
 //    @GetMapping("/countries")
-//    public List<Country> getAllCountriesOriginal(){
+//    public List<Country> getAllCountries(){
+//        return clientService.getCountries();
+//    }
+//
+//    @GetMapping("/countries")
+//    public List<Country> fallBack(){
 //        return clientService.getCountries();
 //    }
 
@@ -45,12 +56,13 @@ public class ClientController {
     @GetMapping("/countries")
     @HystrixCommand(fallbackMethod = "defaultGetAllCountries")
     public List<Country> getAllCountries() {
-        String url = "http://localhost:8084" + "/countries";
+        String url = lookupUrlFor(serverServiceName) + "/countries";
         countryListCache = Arrays.asList(restTemplate.exchange(url, HttpMethod.GET, createHttpEntity(), Country[].class).getBody());
         return countryListCache;
     }
 
     public List<Country> defaultGetAllCountries() {
+
         return countryListCache;
     }
 
@@ -62,9 +74,9 @@ public class ClientController {
         return new HttpEntity<>(headers);
     }
 
-//    private String lookupUrlFor(String appName) {
-//        InstanceInfo instanceInfo = .getNextServerFromEureka(appName, false);
-//        return instanceInfo.getHomePageUrl();
-//    }
+    private String lookupUrlFor(String appName) {
+        InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka(appName, false);
+        return instanceInfo.getHomePageUrl();
+    }
 
 }
